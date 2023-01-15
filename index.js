@@ -21,10 +21,11 @@ const BotsModel = mongoose.model('Bots', BotsSchema)
 ChatsSchema.index({ token: 1, id: 1 }, { unique: true })
 
 
-const DEFAULT_START_SUCCESS_MESSAGE = process.env.DEFAULT_START_SUCCESS_MESSAGE
-const DEFAULT_START_DUPLICATED_MESSAGE = process.env.DEFAULT_START_DUPLICATED_MESSAGE
-const DEFAULT_START_ERROR_MESSAGE = process.env.DEFAULT_START_ERROR_MESSAGE
+const DEFAULT_START_SUCCESS_MESSAGE = process.env.DEFAULT_START_SUCCESS_MESSAGE || 'Usuário cadastrado com Sucesso!'
+const DEFAULT_START_DUPLICATED_MESSAGE = process.env.DEFAULT_START_DUPLICATED_MESSAGE || 'O seu usuário já estava cadastrado!'
+const DEFAULT_START_ERROR_MESSAGE = process.env.DEFAULT_START_ERROR_MESSAGE || 'Ops! Ocorreu um erro ao cadastrar o seu usuário.'
 
+const BASE_PATH_API = process.env.BASE_PATH_API || '/api/v1'
 
 const bots = {}
 
@@ -82,9 +83,9 @@ const getBot = async (token) => {
 }
 
 
-app.post('/bot', async (req, res) => {
+app.post(BASE_PATH_API + '/bot', async (req, res) => {
 	// #swagger.tags = ['Bot']
-	// #swagger.summary = 'Some summary...'
+	// #swagger.summary = 'Cadastro de um Bot'
 
 	const { token, name, msgSuccess, msgDuplicated, msgError } = req.body
 
@@ -95,8 +96,9 @@ app.post('/bot', async (req, res) => {
 		})
 })
 
-app.put('/bot/:token', async (req, res) => {
+app.put(BASE_PATH_API + '/bot/:token', async (req, res) => {
 	// #swagger.tags = ['Bot']
+	// #swagger.summary = 'Alterar as informações do Bot'
 
 	const { token } = req.params
 	const { name, msgSuccess, msgDuplicated, msgError } = req.body
@@ -106,8 +108,9 @@ app.put('/bot/:token', async (req, res) => {
 		.catch((e) => handleError(e, res))
 })
 
-app.delete('/bot/:token', async (req, res) => {
+app.delete(BASE_PATH_API + '/bot/:token', async (req, res) => {
 	// #swagger.tags = ['Bot']
+	// #swagger.summary = 'Excluir um Bot já cadastrado'
 	
 	const { token } = req.params
 	return BotsModel.findOneAndDelete({ token })
@@ -115,8 +118,9 @@ app.delete('/bot/:token', async (req, res) => {
 		.catch((e) => handleError(e, res))
 })
 
-app.get('/bot/:token', async (req, res) => {
+app.get(BASE_PATH_API + '/bot/:token', async (req, res) => {
 	// #swagger.tags = ['Bot']
+	// #swagger.summary = 'Recuperar as informações de um Bot'
 	
 	const { token } = req.params
 	return BotsModel.findOne({ token })
@@ -125,8 +129,10 @@ app.get('/bot/:token', async (req, res) => {
 })
 
 
-app.post('/message/send', async (req, res) => {
+app.post(BASE_PATH_API + '/message/send', async (req, res) => {
 	// #swagger.tags = ['Message']
+	// #swagger.summary = 'Efetuar o envio de uma mensagem para um usuário[chat.id] específico'
+
 	const { token, id, text } = req.body
 	
 	return processMessageSend({ token, id, text })
@@ -134,8 +140,10 @@ app.post('/message/send', async (req, res) => {
 		.catch((e) => handleError(e, res))		
 })
 
-app.post('/message/send/all', async (req, res) => {
+app.post(BASE_PATH_API + '/message/send/all', async (req, res) => {
 	// #swagger.tags = ['Message']
+	// #swagger.summary = 'Efetuar o envio de uma mensagem broadcast para todos os usuários[chat.id] de um Bot'
+
 	const { token, text } = req.body
 	
 	return processMessageSendAll({ token, text })

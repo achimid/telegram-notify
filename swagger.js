@@ -2,18 +2,15 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
   info: {
-    title: 'My API',
-    description: 'Description',
+    title: 'Telegram Notify Bot API',
+    description: 'API criada utilizando a lib npm `node-telegram-bot-api`(https://www.npmjs.com/package/node-telegram-bot-api). Com o objetivo de disponibilizar os recursos por meio de API REST.',
   },
-  host: 'localhost:3000',
-  schemes: ['http'],
+  basePath: '/api/v1',  
+  host: 'telegram-notify-api.achimid.com.br',
+  schemes: ['https'],
 };
 
 const outputFile = './swagger-output.json';
 const endpointsFiles = ['./index.js'];
-
-/* NOTE: if you use the express Router, you must pass in the 
-   'endpointsFiles' only the root file where the route starts,
-   such as index.js, app.js, routes.js, ... */
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
