@@ -2,14 +2,12 @@
 require('dotenv').config()
 
 const TelegramBot = require('node-telegram-bot-api')
-const statusMonitor = require('express-status-monitor')
+const swaggerUi = require('swagger-ui-express')
 const mongoose = require('mongoose')
 const express = require('express')
 const app = express()
 
-const swaggerUi = require('swagger-ui-express')
 
-app.use(statusMonitor())
 app.use(express.json())
 
 const ChatsSchema = new mongoose.Schema({ token: { type: String }, id: { type: String }, chat: Object })
