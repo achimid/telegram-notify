@@ -8,7 +8,6 @@ const express = require('express')
 const app = express()
 
 const swaggerUi = require('swagger-ui-express')
-const swaggerFile = require('./swagger-output.json')
 
 app.use(statusMonitor())
 app.use(express.json())
@@ -184,6 +183,6 @@ async function main() {
 	await initBots()
 }
 
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+app.use('/', swaggerUi.serve, swaggerUi.setup(require('./swagger-output.json')))
 
 app.listen(process.env.PORT || 3000)
