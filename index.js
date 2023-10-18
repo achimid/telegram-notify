@@ -6,9 +6,12 @@ const swaggerUi = require('swagger-ui-express')
 const mongoose = require('mongoose')
 const express = require('express')
 const app = express()
+var cors = require('cors')
 
 
+app.use(cors())
 app.use(express.json())
+
 
 const ChatsSchema = new mongoose.Schema({ token: { type: String }, id: { type: String }, chat: Object })
 const BotsSchema = new mongoose.Schema({ token: { type: String, unique: true }, name: { type: String }, msgSuccess: { type: String }, msgDuplicated: { type: String }, msgError: { type: String } })
